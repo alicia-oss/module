@@ -13,8 +13,17 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.home' },
-    redirect: '/dashboard/workplace',
+    redirect: '/UserManagement',
     children: [
+      //bank
+      {
+        hidden: false,
+        path: '/UserManagement',
+        name: 'UserManagement',
+        // redirect: '/dashboard/workplace',
+        component: () => import('@/views/bank/userManege/index'),
+        meta: { title: '用户管理', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
+      },
       // dashboard
       {
         path: '/dashboard',
@@ -152,6 +161,7 @@ export const asyncRouterMap = [
 
       // result
       {
+        hidden:false,
         path: '/result',
         name: 'result',
         component: RouteView,

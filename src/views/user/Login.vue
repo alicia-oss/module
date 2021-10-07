@@ -20,7 +20,7 @@
               type="text"
               :placeholder="$t('user.login.username.placeholder')"
               v-decorator="[
-                'username',
+                'account',
                 {rules: [{ required: true, message: $t('user.userName.required') }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
               ]"
             >
@@ -41,32 +41,32 @@
             </a-input-password>
           </a-form-item>
         </a-tab-pane>
-        <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')">
-          <a-form-item>
-            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">
-              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-            </a-input>
-          </a-form-item>
+<!--        <a-tab-pane key="tab2" :tab="$t('user.login.tab-login-mobile')">-->
+<!--          <a-form-item>-->
+<!--            <a-input size="large" type="text" :placeholder="$t('user.login.mobile.placeholder')" v-decorator="['mobile', {rules: [{ required: true, pattern: /^1[34578]\d{9}$/, message: $t('user.login.mobile.placeholder') }], validateTrigger: 'change'}]">-->
+<!--              <a-icon slot="prefix" type="mobile" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+<!--            </a-input>-->
+<!--          </a-form-item>-->
 
-          <a-row :gutter="16">
-            <a-col class="gutter-row" :span="16">
-              <a-form-item>
-                <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['captcha', {rules: [{ required: true, message: $t('user.verification-code.required') }], validateTrigger: 'blur'}]">
-                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>
-                </a-input>
-              </a-form-item>
-            </a-col>
-            <a-col class="gutter-row" :span="8">
-              <a-button
-                class="getCaptcha"
-                tabindex="-1"
-                :disabled="state.smsSendBtn"
-                @click.stop.prevent="getCaptcha"
-                v-text="!state.smsSendBtn && $t('user.register.get-verification-code') || (state.time+' s')"
-              ></a-button>
-            </a-col>
-          </a-row>
-        </a-tab-pane>
+<!--          <a-row :gutter="16">-->
+<!--            <a-col class="gutter-row" :span="16">-->
+<!--              <a-form-item>-->
+<!--                <a-input size="large" type="text" :placeholder="$t('user.login.mobile.verification-code.placeholder')" v-decorator="['captcha', {rules: [{ required: true, message: $t('user.verification-code.required') }], validateTrigger: 'blur'}]">-->
+<!--                  <a-icon slot="prefix" type="mail" :style="{ color: 'rgba(0,0,0,.25)' }"/>-->
+<!--                </a-input>-->
+<!--              </a-form-item>-->
+<!--            </a-col>-->
+<!--            <a-col class="gutter-row" :span="8">-->
+<!--              <a-button-->
+<!--                class="getCaptcha"-->
+<!--                tabindex="-1"-->
+<!--                :disabled="state.smsSendBtn"-->
+<!--                @click.stop.prevent="getCaptcha"-->
+<!--                v-text="!state.smsSendBtn && $t('user.register.get-verification-code') || (state.time+' s')"-->
+<!--              ></a-button>-->
+<!--            </a-col>-->
+<!--          </a-row>-->
+<!--        </a-tab-pane>-->
       </a-tabs>
 
       <a-form-item>
@@ -90,26 +90,26 @@
       </a-form-item>
 
       <div class="user-login-other">
-        <span>{{ $t('user.login.sign-in-with') }}</span>
-        <a>
-          <a-icon class="item-icon" type="alipay-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="taobao-circle"></a-icon>
-        </a>
-        <a>
-          <a-icon class="item-icon" type="weibo-circle"></a-icon>
-        </a>
-        <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>
+<!--        <span>{{ $t('user.login.sign-in-with') }}</span>-->
+<!--        <a>-->
+<!--          <a-icon class="item-icon" type="alipay-circle"></a-icon>-->
+<!--        </a>-->
+<!--        <a>-->
+<!--          <a-icon class="item-icon" type="taobao-circle"></a-icon>-->
+<!--        </a>-->
+<!--        <a>-->
+<!--          <a-icon class="item-icon" type="weibo-circle"></a-icon>-->
+<!--        </a>-->
+<!--        <router-link class="register" :to="{ name: 'register' }">{{ $t('user.login.signup') }}</router-link>-->
       </div>
     </a-form>
 
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
+<!--    <two-step-captcha-->
+<!--      v-if="requiredTwoStepCaptcha"-->
+<!--      :visible="stepCaptchaVisible"-->
+<!--&lt;!&ndash;      @success="stepCaptchaSuccess"&ndash;&gt;-->
+<!--&lt;!&ndash;      @cancel="stepCaptchaCancel"&ndash;&gt;-->
+<!--    ></two-step-captcha>-->
   </div>
 </template>
 
@@ -144,13 +144,13 @@ export default {
     }
   },
   created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
+    // get2step({ })
+    //   .then(res => {
+    //     this.requiredTwoStepCaptcha = res.result.stepCode
+    //   })
+    //   .catch(() => {
+    //     this.requiredTwoStepCaptcha = false
+    //   })
     // this.requiredTwoStepCaptcha = true
   },
   methods: {
@@ -181,15 +181,15 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
+      const validateFieldsKey = customActiveKey === 'tab1' ? ['account', 'password'] : ['mobile', 'captcha']
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
           console.log('login form', values)
           const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
+          delete loginParams.account
+          loginParams[!state.loginType ? 'email' : 'account'] = values.account
+          // loginParams.password = md5(values.password)
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
@@ -203,62 +203,50 @@ export default {
         }
       })
     },
-    getCaptcha (e) {
-      e.preventDefault()
-      const { form: { validateFields }, state } = this
-
-      validateFields(['mobile'], { force: true }, (err, values) => {
-        if (!err) {
-          state.smsSendBtn = true
-
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60
-              state.smsSendBtn = false
-              window.clearInterval(interval)
-            }
-          }, 1000)
-
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
-            setTimeout(hide, 2500)
-            this.$notification['success']({
-              message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-              duration: 8
-            })
-          }).catch(err => {
-            setTimeout(hide, 1)
-            clearInterval(interval)
-            state.time = 60
-            state.smsSendBtn = false
-            this.requestFailed(err)
-          })
-        }
-      })
-    },
-    stepCaptchaSuccess () {
-      this.loginSuccess()
-    },
-    stepCaptchaCancel () {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
-      })
-    },
+    // getCaptcha (e) {
+    //   e.preventDefault()
+    //   const { form: { validateFields }, state } = this
+    //
+    //   validateFields(['mobile'], { force: true }, (err, values) => {
+    //     if (!err) {
+    //       state.smsSendBtn = true
+    //       const interval = window.setInterval(() => {
+    //         if (state.time-- <= 0) {
+    //           state.time = 60
+    //           state.smsSendBtn = false
+    //           window.clearInterval(interval)
+    //         }
+    //       }, 1000)
+    //
+    //       const hide = this.$message.loading('验证码发送中..', 0)
+    //       getSmsCaptcha({ mobile: values.mobile }).then(res => {
+    //         setTimeout(hide, 2500)
+    //         this.$notification['success']({
+    //           message: '提示',
+    //           description: '验证码获取成功，您的验证码为：' + res.result.captcha,
+    //           duration: 8
+    //         })
+    //       }).catch(err => {
+    //         setTimeout(hide, 1)
+    //         clearInterval(interval)
+    //         state.time = 60
+    //         state.smsSendBtn = false
+    //         this.requestFailed(err)
+    //       })
+    //     }
+    //   })
+    // },
+    // stepCaptchaSuccess () {
+    //   this.loginSuccess()
+    // },
+    // stepCaptchaCancel () {
+    //   this.Logout().then(() => {
+    //     this.loginBtn = false
+    //     this.stepCaptchaVisible = false
+    //   })
+    // },
     loginSuccess (res) {
       console.log(res)
-      // check res.homePage define, set $router.push name res.homePage
-      // Why not enter onComplete
-      /*
-      this.$router.push({ name: 'analysis' }, () => {
-        console.log('onComplete')
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
-      })
-      */
       this.$router.push({ path: '/' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {

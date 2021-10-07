@@ -235,36 +235,36 @@ export default {
   },
   methods: {
     getProjects () {
-      this.$http.get('/list/search/projects').then(res => {
-        this.projects = res.result && res.result.data
-        this.loading = false
-      })
+      // this.$http.get('/list/search/projects').then(res => {
+      //   this.projects = res.result && res.result.data
+      //   this.loading = false
+      // })
     },
     getActivity () {
-      this.$http.get('/workplace/activity').then(res => {
-        this.activities = res.result
-      })
+      // this.$http.get('/workplace/activity').then(res => {
+      //   this.activities = res.result
+      // })
     },
     getTeams () {
-      this.$http.get('/workplace/teams').then(res => {
-        this.teams = res.result
-      })
+      // this.$http.get('/workplace/teams').then(res => {
+      //   this.teams = res.result
+      // })
     },
     initRadar () {
       this.radarLoading = true
 
-      this.$http.get('/workplace/radar').then(res => {
-        const dv = new DataSet.View().source(res.result)
-        dv.transform({
-          type: 'fold',
-          fields: ['个人', '团队', '部门'],
-          key: 'user',
-          value: 'score'
-        })
+      // this.$http.get('/workplace/radar').then(res => {
+      //   const dv = new DataSet.View().source(res.result)
+      //   dv.transform({
+      //     type: 'fold',
+      //     fields: ['个人', '团队', '部门'],
+      //     key: 'user',
+      //     value: 'score'
+      //   })
 
-        this.radarData = dv.rows
-        this.radarLoading = false
-      })
+        // this.radarData = dv.rows
+        // this.radarLoading = false
+      // })
     }
   }
 }

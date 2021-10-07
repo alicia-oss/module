@@ -1,10 +1,12 @@
 import request from '@/utils/request'
 
+
+const baseUrl = 'http://localhost:8080'
 const userApi = {
-  Login: '/auth/login',
-  Logout: '/auth/logout',
+  Login: '/bank/login/login',
+  Logout:'/bank/login/logout',
   ForgePassword: '/auth/forge-password',
-  Register: '/auth/register',
+  // Register: '/auth/register',
   twoStepCode: '/auth/2step-code',
   SendSms: '/account/sms',
   SendSmsErr: '/account/sms_err',
@@ -28,7 +30,10 @@ export function login (parameter) {
   return request({
     url: userApi.Login,
     method: 'post',
-    data: parameter
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
   })
 }
 
@@ -60,7 +65,7 @@ export function getCurrentUserNav () {
 export function logout () {
   return request({
     url: userApi.Logout,
-    method: 'post',
+    method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
