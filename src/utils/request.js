@@ -9,7 +9,7 @@ import router from "@/router/index.js";
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
-  baseURL: 'http://localhost:8080',
+  baseURL: '',
   timeout: 6000 // 请求超时时间
 })
 
@@ -37,7 +37,7 @@ const errorHandler = (error) => {
       //     }, 1500)
       //   })
       // }
-      // router.push({path:'/user'});
+      router.push({path:'/user'});
     }
   }
   return Promise.reject(error);

@@ -1,7 +1,6 @@
 import request from '@/utils/request'
 import axios from "axios";
 
-const baseUrl = 'http://localhost:8080'
 const api = {
   user: '/user',
   role: '/role',
@@ -18,8 +17,8 @@ export function postAction(url,parameter) {
   //将签名和时间戳，添加在请求接口 Header
   // let signHeader = {"X-Sign": sign,"X-TIMESTAMP": signMd5Utils.getDateTimeToString()};
 
-  return axios({
-    url: baseUrl+url,
+  return request({
+    url: url,
     method:'post' ,
     data: parameter,
   })
@@ -27,8 +26,8 @@ export function postAction(url,parameter) {
 
 //post method= {post | put}
 export function httpAction(url,parameter,method) {
-  return axios({
-    url: baseUrl+url,
+  return request({
+    url: url,
     method:method ,
     data: parameter,
   })
@@ -36,8 +35,8 @@ export function httpAction(url,parameter,method) {
 
 //put
 export function putAction(url,parameter) {
-  return axios({
-    url: baseUrl+url,
+  return request({
+    url: url,
     method:'put',
     data: parameter
   })
@@ -45,8 +44,8 @@ export function putAction(url,parameter) {
 
 //get
 export function getAction(url,parameter) {
-  return axios({
-    url: baseUrl+url,
+  return request({
+    url: url,
     method: 'get',
     params: parameter,
 
@@ -55,8 +54,8 @@ export function getAction(url,parameter) {
 
 //deleteAction
 export function deleteAction(url,parameter) {
-  return axios({
-    url: baseUrl+url,
+  return request({
+    url: url,
     method: 'delete',
     params: parameter
   })
@@ -64,7 +63,7 @@ export function deleteAction(url,parameter) {
 
 export function getUserList (parameter) {
   return request({
-    url: api.user,
+    url: user,
     method: 'get',
     params: parameter
   })

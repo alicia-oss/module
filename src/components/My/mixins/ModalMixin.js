@@ -44,6 +44,8 @@ export const ModalMixin = {
       this.visible = false;
     },
 
+
+
     handleOk(){
       const that = this;
       this.$refs.form.validate(valid=>{
@@ -60,8 +62,7 @@ export const ModalMixin = {
             httpurl+=this.url.edit;
             method = 'put';
           }
-          httpAction(httpurl,this.model,method).then((response)=>{
-            let res = response.data;
+          httpAction(httpurl,this.model,method).then((res)=>{
             if(res.success){
               that.$message.success(res.message);
               that.$emit('ok');

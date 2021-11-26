@@ -50,10 +50,6 @@
                   <a-input v-model="model.account"    placeholder="请输入账号"/>
                 </a-form-model-item>
 
-                <a-form-model-item label="密码" required prop="password" hasFeedback>
-                  <a-input v-model="model.password"    placeholder="请输入密码"/>
-                </a-form-model-item>
-
                   <a-form-model-item label="员工姓名" required prop="name" hasFeedback>
                     <a-auto-complete
                       :data-source="inputData.employeeId"
@@ -72,8 +68,8 @@
                 </a-form-model-item>
 
                   <a-form-model-item label="职位" required  prop="role" hasFeedback >
-                    <a-select placeholder="请输入职位" v-model="model.role">
-                      <a-select-option v-for="item in inputData.role" :value="item.key">
+                    <a-select mode="multiple" placeholder="请输入职位" v-model="model.role">
+                      <a-select-option  v-for="item in inputData.role" :value="item.key">
                         {{item.value}}
                       </a-select-option>
                     </a-select>
@@ -88,7 +84,7 @@
                 </a-form-model-item>
 
                   <a-form-model-item label="上传人"  prop="uploadUserId" hasFeedback >
-                    <a-input  placeholder="请输入上传人"  v-model="model.uploadUserId" :disabled="true"/>
+                    <a-input  placeholder="请输入上传人"  v-model="model.uploadUserName" :disabled="true"/>
                   </a-form-model-item>
 
               </div>
@@ -96,10 +92,6 @@
 
                 <a-form-model-item label="账号" required prop="account" hasFeedback>
                   <a-input v-model="model.account"  :read-only="true"  placeholder="请输入账号"/>
-                </a-form-model-item>
-
-                <a-form-model-item label="密码" required prop="password" hasFeedback>
-                  <a-input v-model="model.password"   :read-only="true"  placeholder="请输入密码"/>
                 </a-form-model-item>
 
                 <a-form-model-item label="员工姓名" required prop="name" hasFeedback>
@@ -123,7 +115,7 @@
                 </a-form-model-item>
 
                 <a-form-model-item label="上传人"  prop="uploadUserId" hasFeedback >
-                  <a-input v-model="model.uploadUserId"  :read-only="true"/>
+                  <a-input v-model="model.uploadUserName"  :read-only="true"/>
                 </a-form-model-item>
               </div>
             </a-form-model>
@@ -175,8 +167,7 @@ export default {
       let myData = new Date();
       this.model.createTime = myData.Format("yyyy-MM-dd");
       this.model.updateTime = myData.Format("yyyy-MM-dd");
-      console.log("ce",myData.Format("yyyy-MM-dd"));
-      this.model.uploadUserId = '管理员孙'
+      this.model.uploadUserName = this.$store.getters.nickname + "-" + this.$store.getters.employeeId;
     },
 
     // /**
@@ -188,10 +179,13 @@ export default {
     //  */
     checkVal(rule, value, callback){
       let params = new Object() ;
+      let reg = /[a-zA-Z]\d{5,}/;
+      if(!reg.test(value)){
+        return callback(new Error("账号必须用字母开头！"));
+      }
       this.$set(params,toLine(rule.field),value)
       console.log('校验',params);
-      getAction(this.url.check,params).then((response)=>{
-        let res = response.data;
+      getAction(this.url.check,params).then((res)=>{
         if(!res.success){
           return callback(new Error(res.message));
         }

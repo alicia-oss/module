@@ -1,5 +1,6 @@
 <template>
   <a-card :bordered="false">
+
     <!--     查询区域 -->
     <div class="table-page-search-wrapper">
       <a-row :gutter="30">
@@ -7,24 +8,20 @@
           <a-form layout="inline" @keyup.enter.native="searchQuery">
             <a-row :gutter="30">
               <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">
-                <a-form-item label="员工姓名">
-                  <a-input placeholder="请输入员工姓名模糊查询" v-model="queryParam.name"></a-input>
+                <a-form-item label="姓名">
+                  <a-input placeholder="请输入姓名模糊查询" v-model="queryParam.realname"></a-input>
                 </a-form-item>
               </a-col>
 
               <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">
-                <a-form-item label="账号">
-                  <a-input placeholder="请输入账号模糊查询" v-model="queryParam.account"></a-input>
+                <a-form-item label="电话号码">
+                  <a-input placeholder="请输入电话号码模糊查询" v-model="queryParam.phone"></a-input>
                 </a-form-item>
               </a-col>
 
               <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">
-                <a-form-item label="职位">
-                  <a-select placeholder="请选择职位" v-model="queryParam.role">-->
-                    <a-select-option v-for="item in inputData.role"  :value="item.key">
-                      {{ item.value }}
-                    </a-select-option>
-                  </a-select>
+                <a-form-item label="身份证号码">
+                  <a-input placeholder="请输入身份证号码模糊查询" v-model="queryParam.phone"></a-input>
                 </a-form-item>
               </a-col>
             </a-row>
@@ -36,10 +33,6 @@
             <a-col :xl="8" :lg="9" :md="10" :sm="24">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'" />
-              </a>
             </a-col>
           </span>
         </a-col>
@@ -49,7 +42,6 @@
     <!--     操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download">导出</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -94,7 +86,7 @@
         size="middle"
         bordered
         :rowKey="record=>record.id"
-        :columns="defColumns"
+        :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
@@ -103,41 +95,49 @@
         <span slot="action" slot-scope="text, record">
           <a @click="()=>handleDetail(record)">详情</a>
                  <a-divider type="vertical" />
-          <a @click="handleEdit(record)">编辑</a>
-
+            <a @click="handleBusiness(record)">业务</a>
           <a-divider type="vertical" />
-          <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+            <a-dropdown>
+            <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
+            <a-menu slot="overlay">
+              <a-menu-item>
+                   <a @click="handleEdit(record)">编辑</a>
+              </a-menu-item>
+
+              <a-menu-item>
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
-          </a-popconfirm>
+                </a-popconfirm>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
         </span>
-
-
       </a-table>
     </div>
 
     <modal ref="modalForm" @ok="modalFormOk"></modal>
-
+    <business-modal ref="businessModal" @ok="modalFormOk"></business-modal>
   </a-card>
 </template>
 
 <script>
 
 import {ListMixin} from "@/components/My/mixins/ListMixin";
-import Modal from "@/views/bank/userManege/childComponents/Modal";
-import test from "@/views/bank/userManege/test";
+import Modal from './childComponents/Modal'
+import BusinessModal from "./childComponents/BusinessModal";
+
 export default {
   name: 'Index',
   components:{
     Modal,
-    test
+    BusinessModal
   },
   mixins:[ListMixin],
   data() {
     return {
       inputData:{
-        role:[{key:1,value:'管理员'},{key:2,value: '业务员'}]
-      },
 
+      },
       // 默认列
       defColumns: [
         {
@@ -151,39 +151,25 @@ export default {
           }
         },
         {
-          title: '员工姓名',
+          title: '姓名',
           align: 'center',
-          dataIndex: 'name'
+          dataIndex: 'realname'
         },
         {
-          title: '工号',
+          title: '身份证号码',
           align: 'center',
-          dataIndex: 'employeeId'
+          dataIndex: 'identityCard'
         },
         {
-          title: '职位',
+          title: '电话号码',
           align: 'center',
-          dataIndex: 'roles_dict'
-        },
-        {
-          title: '账号',
-          align: 'center',
-          dataIndex: 'account'
+          dataIndex: 'phone'
         },
         {
           title: '创建时间',
           align: 'center',
           dataIndex: 'createTime'
         },
-        // {
-        //   title: '性别',
-        //   align: "center",
-        //   dataIndex: 'sex',
-        //   customRender: (text) => {
-        //     //字典值替换通用方法
-        //     return filterDictTextByCache('sex', text);
-        //   }
-        // },
         {
           title: '操作',
           dataIndex: 'action',
@@ -197,26 +183,53 @@ export default {
       ],
 
       url:{
-        list:'/bank/user/list',
-        delete:'/bank/user/delete',
-        deleteBatch:'/bank/user/deleteBatch'
+        list:'/bank/customer/list',
+        delete:'/bank/customer/delete',
+        deleteBatch:'/bank/customer/deleteBatch'
       }
     }
   },
   methods: {
+    //办理业务
+    handleBusiness(record){
+      this.$refs.businessModal.edit(record);
+      this.$refs.businessModal.method = "add";
+      this.$refs.modalForm.disableSubmit = false;
+      this.$refs.modalForm.title = "业务办理";
+    },
     //搜索方法
     handleEdit(record) {
       this.$refs.modalForm.edit(record);
       this.$refs.modalForm.method = "edit";
       this.$refs.modalForm.disableSubmit = false;
-      this.$refs.modalForm.title = "编辑用户信息";
+      this.$refs.modalForm.title = "编辑储户信息";
     },
 
     handleAdd() {
       this.$refs.modalForm.add();
       this.$refs.modalForm.method = "add";
       this.$refs.modalForm.disableSubmit = false;
-      this.$refs.modalForm.title = "新增用户信息";
+      this.$refs.modalForm.title = "新增储户信息";
+    },
+
+    handleDetail(record,index) {
+      this.currentModalIndex = index;
+      if(index >= this.dataSource.length-1){
+        this.$refs.modalForm.ableNext = false;
+      }
+      else{
+        this.$refs.modalForm.ableNext = true;
+      }
+      if(index <= 0 ){
+        this.$refs.modalForm.ableLast = false;
+      }
+      else{
+        this.$refs.modalForm.ableLast = true;
+      }
+      this.$refs.modalForm.method = "check";
+      this.$refs.modalForm.edit(record);
+      this.$refs.modalForm.disableSubmit = true;
+      this.$refs.modalForm.title = "查看储户信息";
     },
 
     //查询参数需要自己设计，去上面的查询框里面改，举例如下
@@ -225,10 +238,7 @@ export default {
     //   this.queryParam.birthday_begin=dateString[0];
     //   this.queryParam.birthday_end=dateString[1];
     // },
-    onIssueDateChange: function(value, dateString) {
-      this.queryParam.issueDate_begin = dateString[0];
-      this.queryParam.issueDate_end = dateString[1];
-    },
+
 
   }
 

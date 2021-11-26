@@ -1,5 +1,6 @@
 <template>
   <a-card :bordered="false">
+
     <!--     查询区域 -->
     <div class="table-page-search-wrapper">
       <a-row :gutter="30">
@@ -7,26 +8,26 @@
           <a-form layout="inline" @keyup.enter.native="searchQuery">
             <a-row :gutter="30">
               <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">
-                <a-form-item label="员工姓名">
-                  <a-input placeholder="请输入员工姓名模糊查询" v-model="queryParam.name"></a-input>
+                <a-form-item label="储户姓名">
+                  <a-input placeholder="请输入储户姓名模糊查询" v-model="queryParam.realname"></a-input>
                 </a-form-item>
               </a-col>
 
               <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">
-                <a-form-item label="账号">
-                  <a-input placeholder="请输入账号模糊查询" v-model="queryParam.account"></a-input>
+                <a-form-item label="电话号码">
+                  <a-input placeholder="请输入电话号码模糊查询" v-model="queryParam.phone"></a-input>
                 </a-form-item>
               </a-col>
 
-              <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">
-                <a-form-item label="职位">
-                  <a-select placeholder="请选择职位" v-model="queryParam.role">-->
-                    <a-select-option v-for="item in inputData.role"  :value="item.key">
-                      {{ item.value }}
-                    </a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
+<!--              <a-col :xl="queryCol.xl" :lg="queryCol.lg" :md="queryCol.md" :sm="queryCol.sm">-->
+<!--                <a-form-item label="">-->
+<!--                  <a-select placeholder="请选择职位" v-model="queryParam.role">&ndash;&gt;-->
+<!--                    <a-select-option v-for="item in inputData.role"  :value="item.key">-->
+<!--                      {{ item.value }}-->
+<!--                    </a-select-option>-->
+<!--                  </a-select>-->
+<!--                </a-form-item>-->
+<!--              </a-col>-->
             </a-row>
           </a-form>
         </a-col>
@@ -47,21 +48,14 @@
     </div>
 
     <!--     操作按钮区域 -->
-    <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download">导出</a-button>
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel">
-            <a-icon type="delete" />
-            删除
-          </a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作
-          <a-icon type="down" />
-        </a-button>
-      </a-dropdown>
-    </div>
+<!--    <div class="table-operator">-->
+<!--      <a-button type="primary" icon="download">导出</a-button>-->
+<!--      <a-dropdown v-if="selectedRowKeys.length > 0">-->
+<!--        <a-button style="margin-left: 8px"> 批量操作-->
+<!--          <a-icon type="down" />-->
+<!--        </a-button>-->
+<!--      </a-dropdown>-->
+<!--    </div>-->
 
     <!--     table区域-begin-->
     <div>
@@ -100,17 +94,6 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
-        <span slot="action" slot-scope="text, record">
-          <a @click="()=>handleDetail(record)">详情</a>
-                 <a-divider type="vertical" />
-          <a @click="handleEdit(record)">编辑</a>
-
-          <a-divider type="vertical" />
-          <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-          </a-popconfirm>
-        </span>
-
 
       </a-table>
     </div>
@@ -124,12 +107,11 @@
 
 import {ListMixin} from "@/components/My/mixins/ListMixin";
 import Modal from "@/views/bank/userManege/childComponents/Modal";
-import test from "@/views/bank/userManege/test";
+
 export default {
   name: 'Index',
   components:{
-    Modal,
-    test
+    Modal
   },
   mixins:[ListMixin],
   data() {
@@ -151,73 +133,53 @@ export default {
           }
         },
         {
-          title: '员工姓名',
+          title: '储户姓名',
           align: 'center',
-          dataIndex: 'name'
+          dataIndex: 'realname'
         },
         {
-          title: '工号',
+          title: '电话号码',
           align: 'center',
-          dataIndex: 'employeeId'
+          dataIndex: 'phone'
         },
         {
-          title: '职位',
+          title: '类型',
           align: 'center',
-          dataIndex: 'roles_dict'
+          dataIndex: 'type',
+          customRender:function (t){
+            if(t === 0){
+              return '存款'
+            }
+            else{
+              return '取款'
+            }
+          }
         },
         {
-          title: '账号',
+          title: '金额',
           align: 'center',
-          dataIndex: 'account'
+          dataIndex: 'amount'
         },
         {
-          title: '创建时间',
+          title: '操作时间',
           align: 'center',
           dataIndex: 'createTime'
         },
-        // {
-        //   title: '性别',
-        //   align: "center",
-        //   dataIndex: 'sex',
-        //   customRender: (text) => {
-        //     //字典值替换通用方法
-        //     return filterDictTextByCache('sex', text);
-        //   }
-        // },
         {
-          title: '操作',
-          dataIndex: 'action',
+          title: '操作人',
           align: 'center',
-          scopedSlots: {
-            filterDropdown: 'filterDropdown',
-            filterIcon: 'filterIcon',
-            customRender: 'action'
-          }
-        }
+          dataIndex: 'uploadUserName'
+        },
       ],
 
       url:{
-        list:'/bank/user/list',
-        delete:'/bank/user/delete',
-        deleteBatch:'/bank/user/deleteBatch'
+        list:'/bank/deposit-log/list',
+        delete:'/bank/deposit-log/delete',
+        deleteBatch:'/bank/deposit-log/deleteBatch'
       }
     }
   },
   methods: {
-    //搜索方法
-    handleEdit(record) {
-      this.$refs.modalForm.edit(record);
-      this.$refs.modalForm.method = "edit";
-      this.$refs.modalForm.disableSubmit = false;
-      this.$refs.modalForm.title = "编辑用户信息";
-    },
-
-    handleAdd() {
-      this.$refs.modalForm.add();
-      this.$refs.modalForm.method = "add";
-      this.$refs.modalForm.disableSubmit = false;
-      this.$refs.modalForm.title = "新增用户信息";
-    },
 
     //查询参数需要自己设计，去上面的查询框里面改，举例如下
     // onBirthdayChange: function (value, dateString) {

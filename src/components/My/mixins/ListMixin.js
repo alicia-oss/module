@@ -77,6 +77,25 @@ export const ListMixin = {
     // }
   },
   methods:{
+    handleDetail(record,index) {
+      this.currentModalIndex = index;
+      if(index >= this.dataSource.length-1){
+        this.$refs.modalForm.ableNext = false;
+      }
+      else{
+        this.$refs.modalForm.ableNext = true;
+      }
+      if(index <= 0 ){
+        this.$refs.modalForm.ableLast = false;
+      }
+      else{
+        this.$refs.modalForm.ableLast = true;
+      }
+      this.$refs.modalForm.method = "check";
+      this.$refs.modalForm.edit(record);
+      this.$refs.modalForm.disableSubmit = true;
+      this.$refs.modalForm.title = "查看用户信息";
+    },
 
     //列管理
     onColSettingsChange(checkedValues) {
@@ -136,8 +155,7 @@ export const ListMixin = {
       var params = this.getQueryParams();//查询条件
       this.loading = true;
       //params为查询参数
-      getAction(this.url.list, params).then((response) => {
-        let res = response.data;
+      getAction(this.url.list, params).then((res) => {
         if (res.success) {
           //update-begin---author:zhangyafei    Date:20201118  for：适配不分页的数据列表------------
           this.dataSource = res.result.records||res.result;
@@ -224,7 +242,6 @@ export const ListMixin = {
           onOk: function () {
             that.loading = true;
             deleteAction(that.url.deleteBatch, {ids: ids}).then((res) => {
-              res = res.data;
               if (res.success) {
                 //重新计算分页问题
                 that.reCalculatePage(that.selectedRowKeys.length)
@@ -249,7 +266,6 @@ export const ListMixin = {
       }
       var that = this;
       deleteAction(that.url.delete, {id: id}).then((res) => {
-        res = res.data;
         if (res.success) {
           //重新计算分页问题  可以确保留在当前页
           that.reCalculatePage(1)
